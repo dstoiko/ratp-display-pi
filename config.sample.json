@@ -1,15 +1,10 @@
 {
   "journey": {
     "departureStation": "",
-    "destinationStation": null,
-    "stationAbbr": {
-      "International": "Intl."
-    }
+    "departureStationSlug": "saint+fargeau",
+    "direction": "",
+    "line": ""
   },
-  "refreshTime": 180,
-  "transportApi": {
-    "appId": "",
-    "apiKey": "",
-    "operatingHours": "0-23"
-  }
+  "refreshTime": 10,
+  "color": "yellow"
 }
