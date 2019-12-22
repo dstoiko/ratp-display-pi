@@ -1,0 +1,16 @@
+[Unit]
+Description=ratp keepalive daemon
+
+[Service]
+Type=simple
+ExecStart=/home/pi/ratp-display-pi/src/main.py
+ExecStop=/usr/bin/killall -9 python3
+User=pi
+StandardOutput=syslog+console
+StandardError=syslog+console
+SyslogIdentifier=ratp
+Restart=always
+WorkingDirectory=/home/pi/ratp-display-pi/src
+
+[Install]
+WantedBy=multi-user.target
