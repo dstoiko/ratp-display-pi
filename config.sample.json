@@ -1,10 +1,10 @@
 {
   "journey": {
-    "departureStation": "",
-    "departureStationSlug": "saint+fargeau",
-    "direction": "",
-    "line": ""
+    "departureStation": "La Defense",
+    "departureStationSlug": "la+defense",
+    "direction": "R",
+    "line": "1"
   },
-  "refreshTime": 10,
+  "refreshTime": 60,
   "color": "yellow"
 }
