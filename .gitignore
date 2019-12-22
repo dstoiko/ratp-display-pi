@@ -1,2 +1,4 @@
 ._DS_Store
 config.json
+__pycache__
+*.pyc
