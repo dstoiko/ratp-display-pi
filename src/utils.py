@@ -3,8 +3,8 @@ import os
 from PIL import ImageFont, Image
 
 
-def loadConfig():
-    with open('config.json', 'r') as jsonConfig:
+def loadConfig(path):
+    with open(path, 'r') as jsonConfig:
         data = json.load(jsonConfig)
         return data
 

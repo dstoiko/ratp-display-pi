@@ -1,16 +1,25 @@
-from datetime import timedelta
-from datetime import datetime
+from datetime import timedelta, datetime
 
+from luma.core.interface.serial import spi
+from luma.oled.device import ssd1322
+from luma.core.sprite_system import framerate_regulator
 from luma.core.render import canvas
 from luma.core.virtual import viewport, snapshot
 
+from utils import makeFonts
+
 
 class Display:
-    def __init__(self, fonts, color):
-        self._fonts = fonts
+    def __init__(self, color):
+        self._serial = spi()
+        self._device = ssd1322(self._serial, mode="1", rotate=2)
+        self._fonts = makeFonts()
         self._color = color
+        self._WIDTH = 256
+        self._HEIGHT = 64
         self._STATUS_APPROACHING = "Train a l'approche"
         self._STATUS_DELAYED = "Train retarde"
+        self.regulator = framerate_regulator(fps=10)
 
     def _renderDestination(self, departure, font):
         def drawText(draw, width, height):
@@ -65,18 +74,20 @@ class Display:
         draw.text((0, 0), text=text,
                   font=self._fonts['fontBold'], fill=self._color)
 
-    def drawBlankSignage(self, device, width, height, departureStation):
-        with canvas(device) as draw:
+    def drawBlankSignage(self, departureStation):
+        with canvas(self._device) as draw:
             welcomeSize = draw.textsize("Welcome to", self._fonts["fontBold"])
 
-        with canvas(device) as draw:
+        with canvas(self._device) as draw:
             stationSize = draw.textsize(
                 departureStation, self._fonts["fontBold"])
 
-        device.clear()
+        self._device.clear()
 
-        virtualViewport = viewport(device, width=width, height=height)
+        virtualViewport = viewport(
+            self._device, width=self._WIDTH, height=self._HEIGHT)
 
+        width = virtualViewport.width
         rowOne = snapshot(width, 10, self._renderWelcomeTo(
             (width - welcomeSize[0]) / 2), interval=10)
         rowTwo = snapshot(width, 10, self._renderDepartureStation(
@@ -95,16 +106,17 @@ class Display:
 
         return virtualViewport
 
-    def drawSignage(self, device, width, height, departures):
-        device.clear()
+    def drawSignage(self, departures):
+        self._device.clear()
 
-        virtualViewport = viewport(device, width=width, height=height)
+        virtualViewport = viewport(
+            self._device, width=self._WIDTH, height=self._HEIGHT)
 
         maxWidthStatus = self._STATUS_DELAYED
         width = virtualViewport.width
 
         # Maximum text size
-        with canvas(device) as draw:
+        with canvas(self._device) as draw:
             w, h = draw.textsize(maxWidthStatus, self._fonts["fontBold"])
 
         maxD = len(departures)

@@ -1,16 +1,14 @@
-import os
+#! /usr/bin/python3 -u
+# -*- coding: utf-8 -*-
+
+from os import path
 import sys
 import time
-import json
 import traceback
 
 from trains import loadDeparturesForStation
-from utils import loadConfig, makeFonts
+from utils import loadConfig
 from display import Display
-
-from luma.core.interface.serial import spi
-from luma.oled.device import ssd1322
-from luma.core.sprite_system import framerate_regulator
 
 
 def loadData(journeyConfig):
@@ -22,30 +20,21 @@ def loadData(journeyConfig):
     return departures, journeyConfig['departureStation']
 
 
-def main():
-    config = loadConfig()
-    serial = spi()
-    device = ssd1322(serial, mode="1", rotate=2)
-    fonts = makeFonts()
+def main(configPath):
+    config = loadConfig(configPath)
 
-    widgetWidth = 256
-    widgetHeight = 64
-
-    regulator = framerate_regulator(fps=10)
-    display = Display(fonts, config["color"])
+    display = Display(config["color"])
 
     timeLastUpdate = time.time() - config["refreshTime"]
     timeNow = time.time()
     while True:
-        with regulator:
+        with display.regulator:
             if timeNow - timeLastUpdate >= config["refreshTime"]:
                 departures, departureStation = loadData(config["journey"])
                 if departures == False:
-                    virtual = display.drawBlankSignage(
-                        device, widgetWidth, widgetHeight, departureStation)
+                    virtual = display.drawBlankSignage(departureStation)
                 else:
-                    virtual = display.drawSignage(
-                        device, widgetWidth, widgetHeight, departures)
+                    virtual = display.drawSignage(departures)
 
                 timeLastUpdate = time.time()
 
@@ -55,12 +44,16 @@ def main():
 
 if __name__ == "__main__":
     try:
-        main()
+        configPath = path.abspath(
+            path.join(path.dirname(__file__), "../config.json"))
+        main(configPath)
     except KeyboardInterrupt:
-        pass
+        sys.exit(0)
     except ValueError as err:
         print(f"Error: {err}")
         traceback.print_exc()
+        sys.exit(1)
     except KeyError as err:
         print(f"Error: Please ensure the {err} environment variable is set")
         traceback.print_exc()
+        sys.exit(2)
