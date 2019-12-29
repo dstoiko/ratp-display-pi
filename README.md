@@ -20,10 +20,11 @@ Placing yourself in the root of the repository:
 
 | Key                              | Example Value
 |----------------------------------|----------
-|`departureStation`  | `La Defense` ([examples](https://github.com/pgrimaud/horaires-ratp-api#exemples-de-requ%C3%AAtes)) display name of the departure station
-|`departureStationSlug`  | `la+defense` ([examples](https://github.com/pgrimaud/horaires-ratp-api#exemples-de-requ%C3%AAtes)) url slug for API call to unofficial API
+|`name`  | `La Defense` ([examples](https://github.com/pgrimaud/horaires-ratp-api#exemples-de-requ%C3%AAtes)) display name of the departure station
+|`slug`  | `la+defense` ([examples](https://github.com/pgrimaud/horaires-ratp-api#exemples-de-requ%C3%AAtes)) url slug for API call to unofficial API
+|`line`  | `1` ([examples](https://github.com/pgrimaud/horaires-ratp-api#exemples-de-requ%C3%AAtes)) metro line code in unofficial API
+|`direction`  | `R` ([examples](https://github.com/pgrimaud/horaires-ratp-api#exemples-de-requ%C3%AAtes)) direction of train ("A" or "R") in unofficial API
 |`refreshTime` | `120` seconds between data refresh
-|`color` | `yellow` [optional] if you find a display with color and want to customize...
 
 ## Hardware
 
