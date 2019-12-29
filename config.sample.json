@@ -1,10 +1,9 @@
 {
-  "journey": {
-    "departureStation": "La Defense",
-    "departureStationSlug": "la+defense",
-    "direction": "R",
-    "line": "1"
+  "station": {
+    "name": "La Defense",
+    "slug": "la+defense",
+    "line": "1",
+    "direction": "R"
   },
-  "refreshTime": 60,
-  "color": "yellow"
+  "refreshTime": 60
 }
